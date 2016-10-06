@@ -7,6 +7,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
+using OpenQA.Selenium.Chrome;
+using CacheBuddy.Services;
 
 namespace CacheBuddy
 {
@@ -24,9 +26,23 @@ namespace CacheBuddy
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 // calculate something for us to return
                 int length = (activity.Text ?? string.Empty).Length;
-
+                Activity reply;
+                if (activity.Text.Equals("gru"))
+                {
+                    reply = activity.CreateReply("Boris");
+                } else if (activity.Text.Equals("How many hours of vacation do I have left?"))
+                {
+                    reply = getVacationDaysRemaining(activity);
+                } else if (activity.Text.Equals("launch selenium")){
+                    VacationTracker vacationTracker = new VacationTracker();
+                    String replyString = vacationTracker.getRemainingVacationDays();
+                    reply = activity.CreateReply(replyString);
+                } else
+                {
+                    reply = activity.CreateReply("Sorry I do not understand. Try asking in Spanish.");
+                }
                 // return our reply to the user
-                Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+                //Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
@@ -35,6 +51,11 @@ namespace CacheBuddy
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        private Activity getVacationDaysRemaining(Activity activity)
+        {
+            return activity.CreateReply("0... Sucks for you");
         }
 
         private Activity HandleSystemMessage(Activity message)
