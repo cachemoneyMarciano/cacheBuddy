@@ -7,13 +7,19 @@ namespace CacheBuddy.Services
 {
     public class ClockService
     {
-        private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        private static TimeZoneInfo INDIA_TIME_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        private static TimeZoneInfo UK_TIME_ZONE = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
         public String getTimeInIndia()
         {
-            DateTime indianTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
-            Console.WriteLine(indianTime);
-           return $"The time in India is: {indianTime.ToString()}!";
+           DateTime indianTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIA_TIME_ZONE);
+           return $"The current time in India is: {indianTime.ToString()}!";
+        }
+
+        public String getTimeInUK()
+        {
+           DateTimeOffset ukTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, UK_TIME_ZONE);
+           return $"The current time in the UK is: {ukTime.ToString()}!";
         }
     }
 }

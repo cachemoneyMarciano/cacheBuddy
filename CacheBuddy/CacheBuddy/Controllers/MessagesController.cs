@@ -37,10 +37,16 @@ namespace CacheBuddy
                     VacationTracker vacationTracker = new VacationTracker();
                     String replyString = vacationTracker.getRemainingVacationDays();
                     reply = activity.CreateReply(replyString);
-                } else if (activity.Text.Equals("time in india"))
+                } else if (activity.Text.Equals("current time in india"))
                 {
                     ClockService clockService = new ClockService();
                     String time = clockService.getTimeInIndia();
+                    reply = activity.CreateReply(time);
+                }
+                else if (activity.Text.Equals("current time in uk"))
+                {
+                    ClockService clockService = new ClockService();
+                    String time = clockService.getTimeInUK();
                     reply = activity.CreateReply(time);
                 }
                 else
